@@ -25,7 +25,7 @@ variable "prod_environment" {
 variable "key_vault_name" {
   description = "Name of the Azure Key Vault (globally unique, 3-24 chars, alphanumeric and hyphens)"
   type        = string
-  default     = "team3-key-vault"
+  default     = "team3-key-vault202649"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9-]{3,24}$", var.key_vault_name))
