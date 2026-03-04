@@ -10,16 +10,6 @@ variable "storage_account_name" {
   default     = "kainostomappsa"
 }
 
-variable "subscription_id" {
-  description = "The subscription ID for the Azure account."
-  type        = string
-}
-
-variable "tenant_id" {
-  description = "The tenant ID for the Azure account."
-  type        = string
-}
-
 variable "location" {
   description = "The Azure region where the resource group will be created."
   type        = string
