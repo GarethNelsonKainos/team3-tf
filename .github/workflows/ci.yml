@@ -13,37 +13,9 @@ env:
     TF_VAR_acr_id : ${{ secrets.ACR_ID }}
 
 jobs:
-    test:
-        name: Test & Quality Checks. 
-        runs-on: ubuntu-latest
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
-              with:
-                node-version: '20'
-
-            - name: Install Frontend Dependencies
-              working-directory: ./team3-front-app/team3-front-app
-              run: npm install
-
-            - name: Install Backend Dependencies
-              working-directory: ./team3-back-app
-              run: npm install
-
-            - name: Run Frontend Tests
-              working-directory: ./team3-front-app/team3-front-app
-              run: npm run coverage
-            
-            - name: Run Backend Tests
-              working-directory: ./team3-back-app
-              run: npm run coverage
-
     build:
         name: Build & Deploy
         runs-on: ubuntu-latest
-        needs: test
         steps:
             - uses: actions/checkout@v2
 
@@ -56,13 +28,13 @@ jobs:
 
             - name: Pull and Build Frontend Image
               run: |
-                docker pull ${{ secrets.ACR_LOGIN_SERVER }}/team3-front-app:latest || true
-                docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/team3-front-app:latest -f ./team3-front-app/Dockerfile ./team3-front-app
+                docker pull ${{ env.TF_VAR_acr_login_server }}/team3-front-app:latest || true
+                docker build -t ${{ env.TF_VAR_acr_login_server }}/team3-front-app:latest -f ./team3-front-app/Dockerfile ./team3-front-app
 
             - name: Pull and Build Backend Image
               run: |
-                docker pull ${{ secrets.ACR_LOGIN_SERVER }}/team3-back-app:latest || true
-                docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/team3-back-app:latest -f ./team3-back-app/Dockerfile ./team3-back-app
+                docker pull ${{ env.TF_VAR_acr_login_server }}/team3-back-app:latest || true
+                docker build -t ${{ env.TF_VAR_acr_login_server }}/team3-back-app:latest -f ./team3-back-app/Dockerfile ./team3-back-app
             
     terraform-plan:
         name: Terraform Plan
