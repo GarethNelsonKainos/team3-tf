@@ -78,5 +78,5 @@ variable "tags" {
 variable "key_vault_access_group" {
   description = "Group with access to Key Vault"
   type = string
-  default = "2026-Tech-Academy"
+  default = "f2ae751a-9536-4c46-9209-46720122ed4a"
 }

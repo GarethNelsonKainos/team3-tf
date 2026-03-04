@@ -14,7 +14,7 @@ provider "azurerm" {
 provider "azuread" {}
 
 data "azuread_group" "kv_readers" {
-  display_name = var.key_vault_access_group
+  object_id = var.key_vault_access_group
 } 
 
 data "azurerm_role_definition" "kv_secrets_reader" {
