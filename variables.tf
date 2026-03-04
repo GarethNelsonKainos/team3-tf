@@ -1,13 +1,13 @@
 variable "resource_group_name" {
   description = "The name of the resource group to create."
   type        = string
-  default     = "tom_azure_rg"
+  default     = "team3-rg"
 }
 
 variable "storage_account_name" {
   description = "The name of the storage account to create."
   type        = string
-  default     = "kainostomappsa"
+  default     = "team3appsa"
 }
 
 variable "location" {
