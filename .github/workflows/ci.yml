@@ -6,21 +6,9 @@ on:
   pull_request: {}
 
 jobs:
-  greet:
-    name: Say hello
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Print greeting
-        run: |
-          echo "Hello from CI — running on ${{ runner.os }}"
-
   test:
     name: Terraform checks
     runs-on: ubuntu-latest
-    needs: greet
     defaults:
       run:
         working-directory: my-infrastructure
@@ -41,97 +29,6 @@ jobs:
 
       - name: Terraform validate
         run: terraform validate
-
-  build:
-    name: Build Docker image
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'push'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Detect Dockerfile
-        id: detect
-        run: |
-          if [ -f Dockerfile ]; then
-            echo "has_docker=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_docker=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Show Dockerfile status
-        run: |
-          if [ "${{ steps.detect.outputs.has_docker }}" = "true" ]; then
-            echo "Dockerfile found — image build will run"
-          else
-            echo "No Dockerfile found — skipping image build steps"
-          fi
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Show workspace files
-        run: ls -la
-
-      - name: Build image (cache enabled)
-        if: steps.detect.outputs.has_docker == 'true'
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: false
-          tags: |
-            ${{ github.repository }}:${{ github.sha }}
-            ${{ github.repository }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-  publish:
-    name: Publish image to ACR
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Detect Dockerfile
-        id: detect
-        run: |
-          if [ -f Dockerfile ]; then
-            echo "has_docker=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "has_docker=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Skip if no Dockerfile
-        if: steps.detect.outputs.has_docker == 'false'
-        run: |
-          echo "No Dockerfile found in repository — skipping publish"
-          exit 0
-
-      - name: Login to ACR
-        if: steps.detect.outputs.has_docker == 'true'
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ secrets.ACR_NAME }}.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
-
-      - name: Push image to ACR
-        if: steps.detect.outputs.has_docker == 'true'
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: |
-            ${{ secrets.ACR_NAME }}.azurecr.io/${{ github.repository }}:${{ github.sha }}
-            ${{ secrets.ACR_NAME }}.azurecr.io/${{ github.repository }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
   # ── Terraform plan (runs on every push & PR) ──────────────────────
   terraform-plan:
@@ -166,7 +63,7 @@ jobs:
   terraform-apply:
     name: Terraform Apply
     runs-on: ubuntu-latest
-    needs: [publish, terraform-plan]
+    needs: [terraform-plan]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     defaults:
       run:

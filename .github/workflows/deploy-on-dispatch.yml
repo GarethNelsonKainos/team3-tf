@@ -1,0 +1,50 @@
+name: Deploy on Image Dispatch
+
+on:
+  repository_dispatch:
+    types: [image_published]
+
+jobs:
+  deploy:
+    name: Deploy from dispatch
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: my-infrastructure
+    env:
+      TF_VAR_environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read dispatch payload
+        id: payload
+        run: |
+          echo "payload=$GITHUB_EVENT_PATH" >> $GITHUB_OUTPUT
+          cat $GITHUB_EVENT_PATH
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Configure Azure credentials
+        if: ${{ secrets.AZURE_CREDENTIALS != '' }}
+        env:
+          AZ_CREDS: ${{ secrets.AZURE_CREDENTIALS }}
+        run: |
+          echo "$AZ_CREDS" > azcreds.json
+          export ARM_CLIENT_ID=$(jq -r .clientId azcreds.json)
+          export ARM_CLIENT_SECRET=$(jq -r .clientSecret azcreds.json)
+          export ARM_TENANT_ID=$(jq -r .tenantId azcreds.json)
+          export ARM_SUBSCRIPTION_ID=$(jq -r .subscriptionId azcreds.json)
+
+      - name: Terraform init
+        run: terraform init -input=false
+
+      - name: Terraform plan
+        run: terraform plan -input=false -no-color
+
+      - name: Apply (if requested)
+        if: ${{ github.event.client_payload.apply == 'true' }}
+        run: terraform apply -input=false -auto-approve
