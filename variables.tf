@@ -1,13 +1,7 @@
 variable "resource_group_name" {
   description = "The name of the resource group to create."
   type        = string
-  default     = "tom_azure_rg"
-}
-
-variable "storage_account_name" {
-  description = "The name of the storage account to create."
-  type        = string
-  default     = "kainostomappsa"
+  default     = "team3-rg"
 }
 
 variable "location" {
@@ -26,16 +20,4 @@ variable "prod_environment" {
   description = "The prod environment for which the infrastructure is being created."
   type        = string
   default     = "prod"
-}
-
-variable "account_tier" {
-  description = "The account tier for the storage account."
-  type        = string
-  default     = "Standard"
-}
-
-variable "account_replication_type" {
-  description = "The replication type for the storage account."
-  type        = string
-  default     = "LRS"
 }
