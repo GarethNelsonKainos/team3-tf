@@ -29,12 +29,11 @@ jobs:
             - name: Pull and Build Frontend Image
               run: |
                 docker pull ${{ env.ACR_LOGIN_SERVER }}/team3-front-app:latest || true
-                docker build -t ${{ env.ACR_LOGIN_SERVER }}/team3-front-app:latest -f ./team3-front-app/Dockerfile ./team3-front-app
+        
 
             - name: Pull and Build Backend Image
               run: |
                 docker pull ${{ env.ACR_LOGIN_SERVER }}/team3-back-app:latest || true
-                docker build -t ${{ env.ACR_LOGIN_SERVER }}/team3-back-app:latest -f ./team3-back-app/Dockerfile ./team3-back-app
 
             - name: Push Frontend Image to ACR
               run: docker push ${{ env.ACR_LOGIN_SERVER }}/team3-front-app:latest
