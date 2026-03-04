@@ -1,13 +1,19 @@
-variable "rg_name" {
-  description = "Name of the Azure Resource Group"
+variable "project" {
+  description = "Project name used in resource naming"
   type        = string
-  default     = "rg-team3-tf"
+  default     = "team3"
+}
+
+variable "rg_name" {
+  description = "Name of the Azure Resource Group (auto-generated if not set)"
+  type        = string
+  default     = ""
 }
 
 variable "location" {
   description = "Azure location for resources"
   type        = string
-  default     = "westeurope"
+  default     = "uksouth"
 }
 
 variable "environment" {

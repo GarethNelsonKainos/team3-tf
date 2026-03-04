@@ -113,15 +113,16 @@ jobs:
           echo "No Dockerfile found in repository — skipping publish"
           exit 0
 
-      - name: Azure login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-
       - name: Login to ACR
-        run: az acr login --name ${{ secrets.ACR_NAME }}
+        if: steps.detect.outputs.has_docker == 'true'
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ secrets.ACR_NAME }}.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
       - name: Push image to ACR
+        if: steps.detect.outputs.has_docker == 'true'
         uses: docker/build-push-action@v4
         with:
           context: .
@@ -131,3 +132,62 @@ jobs:
             ${{ secrets.ACR_NAME }}.azurecr.io/${{ github.repository }}:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  # ── Terraform plan (runs on every push & PR) ──────────────────────
+  terraform-plan:
+    name: Terraform Plan
+    runs-on: ubuntu-latest
+    needs: test
+    defaults:
+      run:
+        working-directory: my-infrastructure
+    env:
+      ARM_CLIENT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+      TF_VAR_environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Plan
+        run: terraform plan -input=false -no-color
+
+  # ── Terraform apply (main branch only, after publish) ─────────────
+  terraform-apply:
+    name: Terraform Apply
+    runs-on: ubuntu-latest
+    needs: [publish, terraform-plan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    defaults:
+      run:
+        working-directory: my-infrastructure
+    env:
+      ARM_CLIENT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJson(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJson(secrets.AZURE_CREDENTIALS).tenantId }}
+      TF_VAR_environment: dev
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.7
+
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform Apply
+        run: terraform apply -input=false -auto-approve

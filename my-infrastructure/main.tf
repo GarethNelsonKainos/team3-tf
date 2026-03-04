@@ -2,12 +2,16 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  rg_name = var.rg_name != "" ? var.rg_name : "rg-${var.project}-${var.environment}"
+}
+
 module "resource_group" {
   source   = "./modules/resource-group"
-  name     = var.rg_name
+  name     = local.rg_name
   location = var.location
   tags = {
     environment = var.environment
-    project     = "team3-tf"
+    project     = var.project
   }
 }
