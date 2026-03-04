@@ -11,11 +11,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "azuread" {}
-
-data "azuread_group" "kv_readers" {
-  object_id = var.key_vault_access_group
-} 
 
 data "azurerm_role_definition" "kv_secrets_reader" {
   name = "Key Vault Secrets User"
@@ -53,6 +48,6 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_role_assignment" "kv_reader_assignment" {
   scope                = azurerm_key_vault.main.id
   role_definition_id   = data.azurerm_role_definition.kv_secrets_reader.id
-  principal_id         = data.azuread_group.kv_readers.object_id 
+  principal_id         = var.key_vault_reader_group_object_id
   depends_on = [ azurerm_key_vault.main ]
 }

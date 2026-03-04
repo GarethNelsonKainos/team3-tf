@@ -75,8 +75,8 @@ variable "tags" {
   }
 }
 
-variable "key_vault_access_group" {
-  description = "Group with access to Key Vault"
-  type = string
-  default = "f2ae751a-9536-4c46-9209-46720122ed4a"
+variable "key_vault_reader_group_object_id" {
+  description = "Azure AD group object ID with Key Vault read access"
+  type        = string
+  default     = "f2ae751a-9536-4c46-9209-46720122ed4a"
 }
