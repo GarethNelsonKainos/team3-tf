@@ -66,8 +66,5 @@ jobs:
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Terraform Apply
-        run: |
-          terraform apply -input=false -auto-approve \
-          -var="backend_image_tag=${{ steps.back.outputs.tag }}" \
-          -var="frontend_image_tag=${{ steps.front.outputs.tag }}"
+        run: terraform apply -input=false -auto-approve
 
