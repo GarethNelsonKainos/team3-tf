@@ -26,12 +26,11 @@ jobs:
                 username: ${{ secrets.ACR_USERNAME }}
                 password: ${{ secrets.ACR_PASSWORD }}
 
-            - name: Pull and Build Frontend Image
+            - name: Pull Frontend Image
               run: |
                 docker pull ${{ env.ACR_LOGIN_SERVER }}/team3-front-app:latest || true
         
-
-            - name: Pull and Build Backend Image
+            - name: Pull Backend Image
               run: |
                 docker pull ${{ env.ACR_LOGIN_SERVER }}/team3-back-app:latest || true
 
