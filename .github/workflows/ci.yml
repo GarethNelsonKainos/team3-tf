@@ -29,7 +29,7 @@ jobs:
               run: npm install
 
             - name: Install Backend Dependencies
-              working-directory: ./team3-back-app/team3-back-app
+              working-directory: ./team3-back-app
               run: npm install
 
             - name: Run Frontend Tests
@@ -37,7 +37,7 @@ jobs:
               run: npm run coverage
             
             - name: Run Backend Tests
-              working-directory: ./team3-back-app/team3-back-app
+              working-directory: ./team3-back-app
               run: npm run coverage
 
     build:
