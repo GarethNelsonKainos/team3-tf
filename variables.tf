@@ -74,3 +74,9 @@ variable "tags" {
     managed_by = "terraform"
   }
 }
+
+variable "key_vault_access_group" {
+  description = "Group with access to Key Vault"
+  type = string
+  default = "2026-Tech-Academy"
+}

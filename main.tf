@@ -11,6 +11,17 @@ provider "azurerm" {
   features {}
 }
 
+provider "azuread" {}
+
+data "azuread_group" "kv_readers" {
+  display_name = var.key_vault_access_group
+} 
+
+data "azurerm_role_definition" "kv_secrets_reader" {
+  name = "Key Vault Secrets User"
+  scope = azurerm_key_vault.main.id
+}
+
 module "resource_group" {
   source              = "./modules/resource_groups"
   resource_group_name = var.resource_group_name
@@ -27,7 +38,7 @@ resource "azurerm_key_vault" "main" {
 
   soft_delete_retention_days    = var.key_vault_soft_delete_retention_days
   purge_protection_enabled      = var.key_vault_purge_protection_enabled
-  public_network_access_enabled = var.key_vault_public_network_access_enabled
+  public_network_access_enabled = false
 
   tags = merge(
     var.tags,
@@ -38,3 +49,10 @@ resource "azurerm_key_vault" "main" {
 }
 
 data "azurerm_client_config" "current" {}
+
+resource "azurerm_role_assignment" "kv_reader_assignment" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_id   = data.azurerm_role_definition.kv_secrets_reader.id
+  principal_id         = data.azuread_group.kv_readers.object_id 
+  depends_on = [ azurerm_key_vault.main ]
+}
