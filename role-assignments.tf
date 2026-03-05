@@ -12,3 +12,9 @@ resource "azurerm_role_assignment" "kv_secrets_user" {
   role_definition_name = "Key Vault Secrets User"
   principal_id         = var.key_vault_reader_group_object_id
 }
+
+resource "azurerm_role_assignment" "kv_secrets_user_managed_identity" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.managed_identity.principal_id
+}

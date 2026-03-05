@@ -34,7 +34,7 @@ resource "azurerm_container_app" "postgres" {
 
     container {
       name   = "postgres"
-      image  = "${var.acr_login_server}/team3-postgres:16-alpine"
+      image  = "${var.acr_login_server}/team3-postgres:latest"
       cpu    = 0.5
       memory = "1Gi"
 
