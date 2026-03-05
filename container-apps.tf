@@ -39,17 +39,17 @@ resource "azurerm_container_app" "postgres" {
       memory = "1Gi"
 
       env {
-        name  = "POSTGRES-USER"
+        name  = "POSTGRES_USER"
         value = var.postgres_user
       }
 
       env {
-        name        = "POSTGRES-PASSWORD"
-        secret_name = "postgres-password"
+        name        = "POSTGRES_PASSWORD"
+        secret_name = "POSTGRES-PASSWORD"
       }
 
       env {
-        name  = "POSTGRES-DB"
+        name  = "POSTGRES_DB"
         value = var.postgres_db
       }
     }
