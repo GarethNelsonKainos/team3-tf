@@ -39,17 +39,17 @@ resource "azurerm_container_app" "postgres" {
       memory = "1Gi"
 
       env {
-        name  = "POSTGRES-USER"
+        name  = "postgres-user"
         value = var.postgres_user
       }
 
       env {
-        name        = "POSTGRES-PASSWORD"
+        name        = "postgres-password"
         secret_name = "postgres-password"
       }
 
       env {
-        name  = "POSTGRES-DB"
+        name  = "postgres-db"
         value = var.postgres_db
       }
     }
@@ -115,48 +115,48 @@ resource "azurerm_container_app" "backend" {
       memory = "0.5Gi"
 
       env {
-        name        = "DATABASE-URL"
+        name        = "database-url"
         secret_name = "database-url"
       }
 
       env {
-        name  = "SCHEMA-NAME"
+        name  = "schema-name"
         value = var.schema_name
       }
 
       env {
-        name        = "JWT-SECRET"
+        name        = "jwt-secret"
         secret_name = "jwt-secret"
       }
 
       env {
-        name  = "CORS_ORIGIN"
+        name  = "cors_origin"
         value = var.cors_origin != "" ? var.cors_origin : "https://ca-frontend-${var.dev_environment}.${azurerm_container_app_environment.container_app_environment.default_domain}"
       }
 
       env {
-        name  = "PORT"
+        name  = "port"
         value = tostring(var.backend_port)
       }
 
       env {
-        name  = "AWS_REGION"
+        name  = "aws_region"
         value = var.aws_region
       }
 
       env {
-        name        = "AWS-ACCESS-KEY-ID"
+        name        = "aws-access-key-id"
         secret_name = "aws-access-key-id"
       }
 
       env {
-        name        = "AWS-SECRET-ACCESS-KEY"
+        name        = "aws-secret-access-key"
         secret_name = "aws-secret-access-key"
       }
 
       env {
-        name  = "S3_BUCKET_NAME"
-        value = var.s3_bucket_name
+        name  = "s3-bucket-name"
+        secret_name = "s3-bucket-name"
       }
     }
   }
@@ -238,27 +238,27 @@ resource "azurerm_container_app" "frontend" {
       memory = "0.5Gi"
 
       env {
-        name  = "API_BASE_URL"
+        name  = "api_base_url"
         value = "https://${azurerm_container_app.backend.ingress[0].fqdn}"
       }
 
       env {
-        name  = "PORT"
+        name  = "port"
         value = tostring(var.frontend_port)
       }
 
       env {
-        name  = "FEATURE_JOB_APPLICATIONS"
+        name  = "feature_job_applications"
         value = var.feature_job_applications
       }
 
       env {
-        name  = "FEATURE_ROLE_FILTERING"
+        name  = "feature_role_filtering"
         value = var.feature_role_filtering
       }
 
       env {
-        name  = "FEATURE_ORDERING_UI"
+        name  = "feature_ordering_ui"
         value = var.feature_ordering_ui
       }
     }
