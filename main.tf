@@ -11,6 +11,8 @@ provider "azurerm" {
   features {}
 }
 
+provider "azuread" {}
+
 module "resource_group" {
   source              = "./modules/resource_groups"
   resource_group_name = var.resource_group_name
