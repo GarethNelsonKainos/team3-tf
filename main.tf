@@ -11,6 +11,7 @@ provider "azurerm" {
   features {}
 }
 
+
 module "resource_group" {
   source              = "./modules/resource_groups"
   resource_group_name = var.resource_group_name
@@ -44,4 +45,10 @@ resource "azurerm_role_assignment" "kv_reader_assignment" {
   role_definition_id = data.azurerm_role_definition.kv_secrets_reader.id
   principal_id       = data.azuread_group.kv_users.id
   depends_on         = [azurerm_key_vault.main]
+resource "azurerm_key_vault_access_policy" "kv_group_reader" {
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = var.key_vault_reader_group_object_id
+
+  secret_permissions = ["Get", "List"]
 }
