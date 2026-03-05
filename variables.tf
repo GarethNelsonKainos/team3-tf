@@ -80,3 +80,9 @@ variable "key_vault_reader_group_object_id" {
   type        = string
   default     = "f2ae751a-9536-4c46-9209-46720122ed4a"
 }
+
+variable "entra_group_name" {
+  description = "Name of the Entra group to assign Key Vault read access to"
+  type        = string
+  default     = "2026-Tech-Academy"
+}
