@@ -156,7 +156,7 @@ resource "azurerm_container_app" "backend" {
 
       env {
         name  = "S3_BUCKET_NAME"
-        secret_name = "s3-bucket-name"
+        value = var.s3_bucket_name
       }
     }
   }
