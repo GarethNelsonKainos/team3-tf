@@ -115,47 +115,47 @@ resource "azurerm_container_app" "backend" {
       memory = "0.5Gi"
 
       env {
-        name        = "database-url"
+        name        = "DATABASE_URL"
         secret_name = "database-url"
       }
 
       env {
-        name  = "schema-name"
+        name  = "SCHEMA_NAME"
         value = var.schema_name
       }
 
       env {
-        name        = "jwt-secret"
+        name        = "JWT_SECRET"
         secret_name = "jwt-secret"
       }
 
       env {
-        name  = "cors_origin"
+        name  = "CORS_ORIGIN"
         value = var.cors_origin != "" ? var.cors_origin : "https://ca-frontend-${var.dev_environment}.${azurerm_container_app_environment.container_app_environment.default_domain}"
       }
 
       env {
-        name  = "port"
+        name  = "PORT"
         value = tostring(var.backend_port)
       }
 
       env {
-        name  = "aws_region"
+        name  = "AWS_REGION"
         value = var.aws_region
       }
 
       env {
-        name        = "aws-access-key-id"
+        name        = "AWS_ACCESS_KEY_ID"
         secret_name = "aws-access-key-id"
       }
 
       env {
-        name        = "aws-secret-access-key"
+        name        = "AWS_SECRET_ACCESS_KEY"
         secret_name = "aws-secret-access-key"
       }
 
       env {
-        name  = "s3-bucket-name"
+        name  = "S3_BUCKET_NAME"
         secret_name = "s3-bucket-name"
       }
     }
@@ -238,27 +238,27 @@ resource "azurerm_container_app" "frontend" {
       memory = "0.5Gi"
 
       env {
-        name  = "api_base_url"
+        name  = "API_BASE_URL"
         value = "https://${azurerm_container_app.backend.ingress[0].fqdn}"
       }
 
       env {
-        name  = "port"
+        name  = "PORT"
         value = tostring(var.frontend_port)
       }
 
       env {
-        name  = "feature_job_applications"
+        name  = "FEATURE_JOB_APPLICATIONS"
         value = var.feature_job_applications
       }
 
       env {
-        name  = "feature_role_filtering"
+        name  = "FEATURE_ROLE_FILTERING"
         value = var.feature_role_filtering
       }
 
       env {
-        name  = "feature_ordering_ui"
+        name  = "FEATURE_ORDERING_UI"
         value = var.feature_ordering_ui
       }
     }
