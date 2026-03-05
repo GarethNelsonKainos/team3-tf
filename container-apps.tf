@@ -34,7 +34,7 @@ resource "azurerm_container_app" "postgres" {
 
     container {
       name   = "postgres"
-      image  = "${var.acr_login_server}/team3-postgres:latest"
+      image  = "${var.acr_login_server}/team3-postgres:16-alpine"
       cpu    = 0.5
       memory = "1Gi"
 
@@ -81,6 +81,7 @@ resource "azurerm_container_app" "postgres" {
   depends_on = [
     azurerm_role_assignment.acr_pull,
     azurerm_role_assignment.kv_secrets_user,
+    azurerm_role_assignment.kv_secrets_user_managed_identity,
   ]
 }
 
