@@ -42,7 +42,8 @@ resource "azurerm_key_vault" "main" {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_role_assignment" "kv_reader_assignment" {
-  scope              = azurerm_key_vault.main.id
-  principal_id       = data.azuread_group.kv_users.id
-  depends_on         = [azurerm_key_vault.main]
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azuread_group.kv_users.id
+  depends_on           = [azurerm_key_vault.main]
 }
