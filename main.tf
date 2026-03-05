@@ -13,6 +13,11 @@ provider "azurerm" {
 
 provider "azuread" {}
 
+data "azurerm_role_definition" "kv_secrets_reader" {
+  name = "Key Vault Secrets User"
+  scope = azurerm_key_vault.main.id
+}
+
 module "resource_group" {
   source              = "./modules/resource_groups"
   resource_group_name = var.resource_group_name
@@ -27,9 +32,9 @@ resource "azurerm_key_vault" "main" {
   tenant_id           = data.azurerm_client_config.current.tenant_id
   sku_name            = var.key_vault_sku_name
 
-  enable_rbac_authorization  = true
-  soft_delete_retention_days = var.key_vault_soft_delete_retention_days
-  purge_protection_enabled   = var.key_vault_purge_protection_enabled
+  soft_delete_retention_days    = var.key_vault_soft_delete_retention_days
+  purge_protection_enabled      = var.key_vault_purge_protection_enabled
+  enable_rbac_authorization     = true
 
   tags = merge(
     var.tags,

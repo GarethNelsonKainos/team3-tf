@@ -81,8 +81,8 @@ variable "key_vault_reader_group_object_id" {
   default     = "f2ae751a-9536-4c46-9209-46720122ed4a"
 }
 
-variable "entra_group_name" {
-  description = "Name of the Entra group to assign Key Vault read access to"
+variable "acr_id" {
+  description = "The resource ID of the Azure Container Registry to which the managed identity needs pull access."
   type        = string
-  default     = "2026-Tech-Academy"
+  default     = "subscriptions/b69dedcd-cfb8-4ec6-ba75-987e53dd2fd2/resourceGroups/rg-academy-acr/providers/Microsoft.ContainerRegistry/registries/academyacrj3r5dv"
 }
