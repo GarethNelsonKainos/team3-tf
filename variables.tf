@@ -90,7 +90,7 @@ variable "managed_identity_name" {
 variable "container_registry_name" {
   description = "Name of the Azure Container Registry"
   type        = string
-  default     = "team3-acr202649"
+  default     = "team3acr202649"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9]{5,50}$", var.container_registry_name))
