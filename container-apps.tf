@@ -111,7 +111,7 @@ resource "azurerm_container_app" "backend" {
 
     container {
       name   = "backend"
-      image  = "${var.acr_login_server}/team3-backend:latest"
+      image  = "${var.acr_login_server}/team3-back-app:latest"
       cpu    = 0.25
       memory = "0.5Gi"
 
@@ -234,7 +234,7 @@ resource "azurerm_container_app" "frontend" {
 
     container {
       name   = "frontend"
-      image  = "${var.acr_login_server}/team3-frontend:latest"
+      image  = "${var.acr_login_server}/team3-front-app:latest"
       cpu    = 0.25
       memory = "0.5Gi"
 
