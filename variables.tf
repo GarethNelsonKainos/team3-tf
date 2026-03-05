@@ -84,7 +84,7 @@ variable "key_vault_reader_group_object_id" {
 variable "acr_id" {
   description = "The resource ID of the Azure Container Registry to which the managed identity needs pull access."
   type        = string
-  default     = "subscriptions/b69dedcd-cfb8-4ec6-ba75-987e53dd2fd2/resourceGroups/rg-academy-acr/providers/Microsoft.ContainerRegistry/registries/academyacrj3r5dv"
+  default     = "/subscriptions/b69dedcd-cfb8-4ec6-ba75-987e53dd2fd2/resourceGroups/rg-academy-acr/providers/Microsoft.ContainerRegistry/registries/academyacrj3r5dv"
 }
 
 variable "acr_login_server" {
