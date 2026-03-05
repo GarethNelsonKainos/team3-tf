@@ -45,7 +45,7 @@ resource "azurerm_container_app" "postgres" {
 
       env {
         name        = "POSTGRES-PASSWORD"
-        secret_name = "POSTGRES-PASSWORD"
+        secret_name = "postgres-password"
       }
 
       env {
@@ -56,7 +56,7 @@ resource "azurerm_container_app" "postgres" {
   }
 
   secret {
-    name                = "POSTGRES-PASSWORD"
+    name                = "postgres-password"
     key_vault_secret_id = data.azurerm_key_vault_secret.postgres_password.versionless_id
     identity            = azurerm_user_assigned_identity.managed_identity.id
   }
@@ -116,7 +116,7 @@ resource "azurerm_container_app" "backend" {
 
       env {
         name        = "DATABASE-URL"
-        secret_name = "DATABASE-URL"
+        secret_name = "database-url"
       }
 
       env {
@@ -126,7 +126,7 @@ resource "azurerm_container_app" "backend" {
 
       env {
         name        = "JWT-SECRET"
-        secret_name = "JWT-SECRET"
+        secret_name = "jwt-secret"
       }
 
       env {
@@ -146,12 +146,12 @@ resource "azurerm_container_app" "backend" {
 
       env {
         name        = "AWS-ACCESS-KEY-ID"
-        secret_name = "AWS-ACCESS-KEY-ID"
+        secret_name = "aws-access-key-id"
       }
 
       env {
         name        = "AWS-SECRET-ACCESS-KEY"
-        secret_name = "AWS-SECRET-ACCESS-KEY"
+        secret_name = "aws-secret-access-key"
       }
 
       env {
@@ -162,25 +162,25 @@ resource "azurerm_container_app" "backend" {
   }
 
   secret {
-    name                = "DATABASE-URL"
+    name                = "database-url"
     key_vault_secret_id = data.azurerm_key_vault_secret.database_url.versionless_id
     identity            = azurerm_user_assigned_identity.managed_identity.id
   }
 
   secret {
-    name                = "JWT-SECRET"
+    name                = "jwt-secret"
     key_vault_secret_id = data.azurerm_key_vault_secret.jwt_secret.versionless_id
     identity            = azurerm_user_assigned_identity.managed_identity.id
   }
 
   secret {
-    name                = "AWS-ACCESS-KEY-ID"
+    name                = "aws-access-key-id"
     key_vault_secret_id = data.azurerm_key_vault_secret.aws_access_key_id.versionless_id
     identity            = azurerm_user_assigned_identity.managed_identity.id
   }
 
   secret {
-    name                = "AWS-SECRET-ACCESS-KEY"
+    name                = "aws-secret-access-key"
     key_vault_secret_id = data.azurerm_key_vault_secret.aws_secret_access_key.versionless_id
     identity            = azurerm_user_assigned_identity.managed_identity.id
   }
