@@ -25,7 +25,7 @@ variable "prod_environment" {
 variable "key_vault_name" {
   description = "Name of the Azure Key Vault (globally unique, 3-24 chars, alphanumeric and hyphens)"
   type        = string
-  default     = "team3-key-vault202649"
+  default     = "team3-key-vault"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9-]{3,24}$", var.key_vault_name))
@@ -80,3 +80,44 @@ variable "key_vault_reader_group_object_id" {
   type        = string
   default     = "f2ae751a-9536-4c46-9209-46720122ed4a"
 }
+
+variable "managed_identity_name" {
+  description = "Name of the user-assigned managed identity"
+  type        = string
+  default     = "team3-identity"
+}
+
+variable "container_registry_name" {
+  description = "Name of the Azure Container Registry"
+  type        = string
+  default     = "team3-acr202649"
+
+  validation {
+    condition     = can(regex("^[a-zA-Z0-9]{5,50}$", var.container_registry_name))
+    error_message = "ACR name must be 5-50 alphanumeric characters."
+  }
+}
+
+variable "container_registry_sku" {
+  description = "ACR SKU (Basic, Standard, or Premium)"
+  type        = string
+  default     = "Basic"
+
+  validation {
+    condition     = contains(["Basic", "Standard", "Premium"], var.container_registry_sku)
+    error_message = "ACR SKU must be Basic, Standard, or Premium."
+  }
+}
+
+variable "frontend_image" {
+  description = "Container image for the frontend app"
+  type        = string
+  default     = "mcr.microsoft.com/k8se/quickstart:latest"
+}
+
+variable "backend_image" {
+  description = "Container image for the backend app"
+  type        = string
+  default     = "mcr.microsoft.com/k8se/quickstart:latest"
+}
+

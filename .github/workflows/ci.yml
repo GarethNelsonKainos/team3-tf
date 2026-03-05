@@ -39,9 +39,6 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-    
-      - name: Terraform Plan
-        run: terraform plan -input=false
 
       - name: Get latest backend tag
         id: back
@@ -65,7 +62,15 @@ jobs:
           --output tsv)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
+      - name: Terraform Plan
+        env:
+          TF_VAR_frontend_image: "${{ secrets.ACR_NAME }}.azurecr.io/team3-front-app:${{ steps.front.outputs.tag }}"
+          TF_VAR_backend_image: "${{ secrets.ACR_NAME }}.azurecr.io/team3-back-app:${{ steps.back.outputs.tag }}"
+        run: terraform plan -input=false
+
       - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          TF_VAR_frontend_image: "${{ secrets.ACR_NAME }}.azurecr.io/team3-front-app:${{ steps.front.outputs.tag }}"
+          TF_VAR_backend_image: "${{ secrets.ACR_NAME }}.azurecr.io/team3-back-app:${{ steps.back.outputs.tag }}"
         run: terraform apply -input=false -auto-approve
 
