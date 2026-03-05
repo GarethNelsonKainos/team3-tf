@@ -84,5 +84,85 @@ variable "key_vault_reader_group_object_id" {
 variable "acr_id" {
   description = "The resource ID of the Azure Container Registry to which the managed identity needs pull access."
   type        = string
-  default     = "subscriptions/b69dedcd-cfb8-4ec6-ba75-987e53dd2fd2/resourceGroups/rg-academy-acr/providers/Microsoft.ContainerRegistry/registries/academyacrj3r5dv"
+  default     = "/subscriptions/b69dedcd-cfb8-4ec6-ba75-987e53dd2fd2/resourceGroups/rg-academy-acr/providers/Microsoft.ContainerRegistry/registries/academyacrj3r5dv"
+}
+
+variable "acr_login_server" {
+  description = "The login server URL of the Azure Container Registry (e.g. myregistry.azurecr.io)"
+  type        = string
+  default     = "academyacrj3r5dv.azurecr.io"
+}
+
+# ── Backend ────────────────────────────────────────────────────────────────────
+
+variable "backend_port" {
+  description = "Port the backend container listens on"
+  type        = number
+  default     = 3001
+}
+
+variable "cors_origin" {
+  description = "Allowed CORS origin for the backend (set after frontend URL is known)"
+  type        = string
+  default     = ""
+}
+
+variable "schema_name" {
+  description = "Prisma database schema name"
+  type        = string
+  default     = "backend"
+}
+
+# ── Frontend ───────────────────────────────────────────────────────────────────
+
+variable "frontend_port" {
+  description = "Port the frontend container listens on"
+  type        = number
+  default     = 3000
+}
+
+variable "feature_job_applications" {
+  description = "Feature flag: enable the job applications UI"
+  type        = string
+  default     = "true"
+}
+
+variable "feature_role_filtering" {
+  description = "Feature flag: enable role filtering UI"
+  type        = string
+  default     = "true"
+}
+
+variable "feature_ordering_ui" {
+  description = "Feature flag: enable ordering UI"
+  type        = string
+  default     = "true"
+}
+
+# ── Postgres ───────────────────────────────────────────────────────────────────
+
+variable "postgres_user" {
+  description = "PostgreSQL database username"
+  type        = string
+  default     = "academy"
+}
+
+variable "postgres_db" {
+  description = "PostgreSQL database name"
+  type        = string
+  default     = "academy"
+}
+
+# ── Non-sensitive S3 config ────────────────────────────────────────────────────
+
+variable "aws_region" {
+  description = "AWS region for S3 file storage"
+  type        = string
+  default     = "us-east-1"
+}
+
+variable "s3_bucket_name" {
+  description = "S3 bucket name for CV uploads"
+  type        = string
+  default     = "team-3-bucket-067502745215"
 }

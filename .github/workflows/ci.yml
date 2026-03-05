@@ -40,9 +40,6 @@ jobs:
       - name: Terraform Init
         run: terraform init
     
-      - name: Terraform Plan
-        run: terraform plan -input=false
-
       - name: Get latest backend tag
         id: back
         run: |
@@ -64,6 +61,20 @@ jobs:
           --top 1 \
           --output tsv)
           echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Get latest postgres tag
+        id: postgres
+        run: |
+          TAG=$(az acr repository show-tags \
+          --name ${{ secrets.ACR_NAME }} \
+          --repository team3-postgres \
+          --orderby time_desc \
+          --top 1 \
+          --output tsv)
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Terraform Plan
+        run: terraform plan -input=false
 
       - name: Terraform Apply
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
