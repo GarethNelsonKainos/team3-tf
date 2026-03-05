@@ -34,7 +34,7 @@ resource "azurerm_container_app" "postgres" {
 
     container {
       name   = "postgres"
-      image  = "${var.acr_login_server}/postgres:16-alpine"
+      image  = "${var.acr_login_server}/team3-postgres:16-alpine"
       cpu    = 0.5
       memory = "1Gi"
 
@@ -45,7 +45,7 @@ resource "azurerm_container_app" "postgres" {
 
       env {
         name        = "POSTGRES_PASSWORD"
-        secret_name = "POSTGRES-PASSWORD"
+        secret_name = "postgres-password"
       }
 
       env {
@@ -115,17 +115,17 @@ resource "azurerm_container_app" "backend" {
       memory = "0.5Gi"
 
       env {
-        name        = "DATABASE-URL"
+        name        = "DATABASE_URL"
         secret_name = "database-url"
       }
 
       env {
-        name  = "SCHEMA-NAME"
+        name  = "SCHEMA_NAME"
         value = var.schema_name
       }
 
       env {
-        name        = "JWT-SECRET"
+        name        = "JWT_SECRET"
         secret_name = "jwt-secret"
       }
 
@@ -145,12 +145,12 @@ resource "azurerm_container_app" "backend" {
       }
 
       env {
-        name        = "AWS-ACCESS-KEY-ID"
+        name        = "AWS_ACCESS_KEY_ID"
         secret_name = "aws-access-key-id"
       }
 
       env {
-        name        = "AWS-SECRET-ACCESS-KEY"
+        name        = "AWS_SECRET_ACCESS_KEY"
         secret_name = "aws-secret-access-key"
       }
 
